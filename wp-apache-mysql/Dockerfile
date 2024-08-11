@@ -11,6 +11,8 @@ COPY ./test-wp.conf /etc/apache2/sites-available
 RUN a2ensite test-wp.conf && \
     a2dissite 000-default.conf
 
+RUN a2enmod rewrite
+
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN chmod 775 /var/www/html
