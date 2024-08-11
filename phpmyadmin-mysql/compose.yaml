@@ -1,13 +1,19 @@
 services:
   db:
     image: mysql:latest
+    container_name: hello-mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - db-data:/var/lib/mysql
   pma:
     image: phpmyadmin
+    container_name: hello-pma
     restart: always
     ports:
       - 8080:80
     environment:
-      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+volumes:
+  db-data:
