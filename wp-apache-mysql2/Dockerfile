@@ -9,9 +9,9 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install mysqli
 
 COPY --from=composer_upstream --link /usr/bin/composer /usr/local/bin/composer
-COPY ./test-wp.conf /etc/apache2/sites-available
+COPY ./wp-local.test.conf /etc/apache2/sites-available
 
-RUN a2ensite test-wp.conf && \
+RUN a2ensite wp-loca.test.conf && \
     a2dissite 000-default.conf
 
 RUN a2enmod rewrite
