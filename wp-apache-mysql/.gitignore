@@ -1,5 +1,6 @@
 *
 !Dockerfile
 !compose.yaml
-!test-wp.conf
+!wp-apache-hello.test.conf
 !.gitignore
+!db-password.txt
