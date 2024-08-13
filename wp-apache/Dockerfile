@@ -10,8 +10,8 @@ RUN docker-php-ext-install mysqli
 
 COPY --from=composer_upstream --link /usr/bin/composer /usr/local/bin/composer
 
-COPY ./wp-apache-hello.test.conf /etc/apache2/sites-available
-RUN a2ensite wp-apache-hello.test.conf && \
+COPY ./demo-wp.test.conf /etc/apache2/sites-available
+RUN a2ensite demo-wp.test.conf && \
     a2dissite 000-default.conf
 
 RUN a2enmod rewrite

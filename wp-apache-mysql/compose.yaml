@@ -16,7 +16,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=secret
     volumes:
-      - wp-db-data:/var/lib/mysql
+      - test-data:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin
     container_name: test-wp-pma
@@ -28,4 +28,4 @@ services:
     depends_on:
       - db
 volumes:
-  wp-db-data:
+  test-data:

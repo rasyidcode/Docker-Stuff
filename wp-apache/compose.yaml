@@ -1,0 +1,9 @@
+services:
+  server:
+    build:
+      context: .
+    container_name: demo-wp
+    volumes:
+      - ./demo-wp:/var/www/html
+    ports:
+      - 80:80
