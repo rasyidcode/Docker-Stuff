@@ -1,0 +1,8 @@
+services:
+  php:
+    build: .
+    image: php8.0-wp-fpm
+    container_name: php-fpm
+    restart: always
+    volumes:
+
