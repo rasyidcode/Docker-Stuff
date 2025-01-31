@@ -1,0 +1,46 @@
+# syntax=docker/dockerfile:1
+
+FROM php:8.0-apache AS php_upstream
+FROM mlocati/php-extension-installer:latest AS php_extension_installer_upstream
+FROM composer:latest AS composer_upstream
+
+FROM php_upstream AS php80
+
+# Use the default production configuration
+RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+COPY ./fs-apache.conf /etc/apache2/sites-available
+
+RUN a2enmod rewrite
+
+RUN a2ensite fs-apache.conf && \
+    a2dissite 000-default.conf
+
+# php extensions installer: https://github.com/mlocati/docker-php-extension-installer
+COPY --from=php_extension_installer_upstream --link /usr/bin/install-php-extensions /usr/local/bin
+
+RUN apt-get update && apt-get install -y \
+    git
+
+# -e -> Exit on Error
+# -u -> Treat Unset Variables as Errors
+# -x -> Print Commands
+RUN set -eux; \
+    install-php-extensions \
+    mysqli \
+    pdo_mysql \
+    intl \
+    zip \
+    redis \
+    ldap \
+    mongodb \
+    gd
+
+COPY --from=composer_upstream --link /usr/bin/composer /usr/local/bin/composer
+
+RUN groupadd --gid 1000 appuser && \
+    useradd --uid 1000 --gid 1000 -m appuser
+
+USER appuser
+
+WORKDIR /srv/facility-scheduler

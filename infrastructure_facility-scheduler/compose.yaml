@@ -1,0 +1,41 @@
+services:
+  web:
+    build: .
+    container_name: fs-web
+    restart: unless-stopped
+    volumes:
+      - ../facility-scheduler:/srv/facility-scheduler
+    depends_on:
+      - db
+    networks:
+      - fs-network
+  server:
+    image: nginx:latest
+    container_name: fs-server
+    restart: no
+    volumes:
+      - ../facility-scheduler:/srv/facility-scheduler
+      - ./fs-nginx.conf:/etc/nginx/conf.d/fs-nginx.conf
+    ports:
+      - "80:80"
+    networks:
+      - fs-network
+    depends_on:
+      - web
+  db:
+    image: mysql:8.0
+    container_name: fs-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - fs-data:/var/lib/mysql
+    networks:
+      - fs-network
+
+networks:
+  fs-network:
+
+
+volumes:
+  fs-data:

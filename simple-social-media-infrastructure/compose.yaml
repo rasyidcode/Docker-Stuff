@@ -1,0 +1,6 @@
+services:
+  auth-php-fpm:
+  auth-nginx:
+  auth-database:
+  frontend:
+  api:

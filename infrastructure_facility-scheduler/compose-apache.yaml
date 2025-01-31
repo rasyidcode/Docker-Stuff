@@ -1,0 +1,45 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-apache
+    container_name: fs-web
+    restart: unless-stopped
+    volumes:
+      - ../../../VMA-Work/facility-scheduler:/srv/facility-scheduler
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+    networks:
+      - fs-network
+  db:
+    image: mysql:8.0
+    container_name: fs-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - fs-data:/var/lib/mysql
+    ports:
+      - "3369:3306"
+    networks:
+      - fs-network
+  redis:
+    image: redis:7.2-alpine
+    container_name: fs-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - fs-redis:/data
+    networks:
+      - fs-network
+
+networks:
+  fs-network:
+
+volumes:
+  fs-data:
+  fs-redis:
