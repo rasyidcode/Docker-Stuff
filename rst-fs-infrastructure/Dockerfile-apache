@@ -10,11 +10,13 @@ FROM php_upstream AS php80
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY ./fs-apache.conf /etc/apache2/sites-available
+COPY ./acs-apache.conf /etc/apache2/sites-available
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite && a2enmod actions
 
-RUN a2ensite fs-apache.conf && \
-    a2dissite 000-default.conf
+RUN a2dissite 000-default.conf && \
+    a2ensite fs-apache.conf && \
+    a2ensite acs-apache.conf
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=php_extension_installer_upstream --link /usr/bin/install-php-extensions /usr/local/bin
@@ -43,4 +45,4 @@ RUN groupadd --gid 1000 appuser && \
 
 USER appuser
 
-WORKDIR /srv/facility-scheduler
+WORKDIR /srv

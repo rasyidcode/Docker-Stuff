@@ -7,8 +7,10 @@ services:
     restart: unless-stopped
     volumes:
       - ../../../VMA-Work/facility-scheduler:/srv/facility-scheduler
+      - ../../../VMA-Work/rst-acs:/srv/rst-acs
     depends_on:
       - db
+      - redis
     ports:
       - "80:80"
     networks:
