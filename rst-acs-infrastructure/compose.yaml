@@ -1,0 +1,62 @@
+services:
+  phpfpm:
+    build: .
+    container_name: acs-php-fpm
+    restart: unless-stopped
+    volumes:
+      - ../../../VMA-Work/rst-acs:/srv/rst-acs
+      - ../../../VMA-Work/idp:/srv/idp
+    depends_on:
+      - db
+      - redis
+    networks:
+      - acs-network
+  server:
+    image: nginx:1.25-alpine
+    container_name: acs-server
+    restart: unless-stopped
+    volumes:
+      - ../../../VMA-Work/rst-acs:/srv/rst-acs
+      - ../../../VMA-Work/idp:/srv/idp
+      - ./acs-nginx.conf:/etc/nginx/conf.d/acs-nginx.conf
+      - ./idp-nginx.conf:/etc/nginx/conf.d/idp-nginx.conf
+    ports:
+      - "80:80"
+    working_dir: /srv/rst-acs
+    networks:
+      acs-network:
+        aliases:
+          - acs-local.rschooltoday.test
+          - idp-local.rschooltoday.test
+    depends_on:
+      - phpfpm
+  db:
+    image: mysql:8.0
+    container_name: acs-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - acs-data:/var/lib/mysql
+    ports:
+      - "3300:3306"
+    networks:
+      - acs-network
+  redis:
+    image: redis:7.2-alpine
+    container_name: acs-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning --requirepass nwfQPGPnoxW6L69hRsb304hp7MOC
+    volumes:
+      - acs-redis:/data
+    networks:
+      - acs-network
+
+networks:
+  acs-network:
+
+volumes:
+  acs-data:
+  acs-redis:
