@@ -3,6 +3,7 @@ services:
     build: .
     volumes:
       - ./../../../VMA-Work/idp-symfony:/srv/idp-symfony
+      - db-data:/var/lib/mysql-data
   server:
     image: nginx:1.27.4-alpine
     volumes:
@@ -14,9 +15,16 @@ services:
     image: mysql:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=secret
+    command:
+      - --require_secure_transport=ON
     volumes:
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      default:
+        aliases:
+          - MySQL_Server_8.0.41_Auto_Generated_Server_Certificate
 volumes:
   db-data:
+

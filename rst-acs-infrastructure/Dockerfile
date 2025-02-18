@@ -16,9 +16,8 @@ COPY --from=php_extension_installer_upstream --link /usr/bin/install-php-extensi
 RUN apk add --no-cache \
     git \
     openssh \
-    make
-    # make \
-    # alpine-conf
+    make \
+    alpine-conf
 
 # -e -> Exit on Error
 # -u -> Treat Unset Variables as Errors
@@ -35,10 +34,10 @@ RUN set -eux; \
 
 COPY --from=composer_upstream --link /usr/bin/composer /usr/local/bin/composer
 
-# RUN setup-user -a appuser && \
-#     echo 'permit nopass :wheel' > /etc/doas.d/doas.conf
+RUN setup-user -a appuser && \
+     echo 'permit nopass :wheel' > /etc/doas.d/doas.conf
 
-# USER appuser
+USER appuser
 
 WORKDIR /srv/rst-acs
 
