@@ -4,6 +4,7 @@ services:
     volumes:
       - ./../../../VMA-Work/idp-symfony:/srv/idp-symfony
       - db-data:/var/lib/mysql-data
+      # - ./disable_functions.ini:/usr/local/etc/php/conf.d/disable-functions.ini
   server:
     image: nginx:1.27.4-alpine
     volumes:
