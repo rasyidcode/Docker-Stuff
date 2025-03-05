@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1
 
 # Versions
-FROM php:8.2-fpm-alpine AS php_upstream
+FROM php:8.0-fpm-alpine AS php_upstream
 FROM mlocati/php-extension-installer:latest AS php_extension_installer_upstream
 FROM composer:latest AS composer_upstream
 
-FROM php_upstream AS php82_fpm
+FROM php_upstream AS php80
 
 # Use the default production configuration
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -28,17 +28,17 @@ RUN set -eux; \
         pdo_mysql \
         intl \
         zip \
-        opcache \
-	apcu \
-	xdebug
+        redis \
+        ldap \
+        gd
 
 COPY --from=composer_upstream --link /usr/bin/composer /usr/local/bin/composer
 
 RUN setup-user -a appuser && \
-    echo 'permit nopass :wheel' > /etc/doas.d/doas.conf
+     echo 'permit nopass :wheel' > /etc/doas.d/doas.conf
 
 USER appuser
 
-WORKDIR /srv
+WORKDIR /srv/idp
 
 EXPOSE 9000

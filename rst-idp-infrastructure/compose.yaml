@@ -1,0 +1,23 @@
+services:
+  php-fpm:
+    build: .
+    volumes:
+      - ./../../../VMA-Work/idp:/srv/idp
+  server:
+    image: nginx:1.25-alpine
+    volumes:
+      - ./../../../VMA-Work/idp:/srv/idp
+      - ./idp-nginx.conf:/etc/nginx/conf.d/idp-nginx.conf
+    ports:
+      - "80:80"
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - idp-data:/var/lib/mysql
+    ports:
+      - "3301:3306"
+
+volumes:
+  idp-data:
