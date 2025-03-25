@@ -3,6 +3,7 @@ services:
     build: ./php/80
     volumes:
       - ./../../../VMA-Work/idp:/srv/idp
+      - ./../../../VMA-Work/rst-acs:/srv/rst-acs
       - db-data:/var/lib/mysql-data
   php82-fpm:
     build: ./php/82
@@ -16,8 +17,14 @@ services:
       - ./nginx/vhost/idp-symfony.conf:/etc/nginx/conf.d/idp-symfony.conf
       - ./../../../VMA-Work/idp:/srv/idp
       - ./nginx/vhost/idp.conf:/etc/nginx/conf.d/idp-nginx.conf
+      - ./../../../VMA-Work/rst-acs:/srv/rst-acs
+      - ./nginx/vhost/acs-nginx.conf:/etc/nginx/conf.d/acs-nginx.conf
     ports:
       - "80:80"
+    networks:
+      default:
+        aliases:
+          - idp-local.rschooltoday.test
   db:
     image: mysql:8.0
     environment:
@@ -32,5 +39,14 @@ services:
       default:
         aliases:
           - MySQL_Server_8.0.41_Auto_Generated_Server_Certificate
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning --requirepass nwfQPGPnoxW6L69hRsb304hp7MOC
+    volumes:
+      - redis-data:/data
+
 volumes:
   db-data:
+  redis-data:
