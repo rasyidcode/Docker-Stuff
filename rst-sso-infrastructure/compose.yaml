@@ -1,0 +1,36 @@
+services:
+  php80-fpm:
+    build: ./php/80
+    volumes:
+      - ./../../../VMA-Work/idp:/srv/idp
+      - db-data:/var/lib/mysql-data
+  php82-fpm:
+    build: ./php/82
+    volumes:
+      - ./../../../VMA-Work/idp-symfony:/srv/idp-symfony
+      - db-data:/var/lib/mysql-data
+  nginx:
+    image: nginx:1.27.4-alpine
+    volumes:
+      - ./../../../VMA-Work/idp-symfony:/srv/idp-symfony
+      - ./nginx/vhost/idp-symfony.conf:/etc/nginx/conf.d/idp-symfony.conf
+      - ./../../../VMA-Work/idp:/srv/idp
+      - ./nginx/vhost/idp.conf:/etc/nginx/conf.d/idp-nginx.conf
+    ports:
+      - "80:80"
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    command:
+      - --require_secure_transport=ON
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      default:
+        aliases:
+          - MySQL_Server_8.0.41_Auto_Generated_Server_Certificate
+volumes:
+  db-data:
