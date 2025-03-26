@@ -1,0 +1,12 @@
+!/bin/sh
+docker run \
+        --network=host \
+        --rm \
+        -e HOME="$HOME" \
+        -u $(id -u):$(id -g) \
+        -v "$HOME/VMA-Work/idp-symfony":"$HOME/VMA-Work/idp-symfony" \
+        -w "$PWD" \
+        php:8.2-alpine \
+        php "$@"
+
+exit $?
