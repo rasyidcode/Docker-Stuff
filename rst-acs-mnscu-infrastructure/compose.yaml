@@ -1,0 +1,23 @@
+services:
+  php-fpm:
+    build: .
+    volumes:
+      - ./../../../VMA-Work/acs-mnscu-php8:/srv/acs-mnscu
+  nginx:
+    image: nginx:1.27.4-alpine
+    volumes:
+      - ./../../../VMA-Work/acs-mnscu-php8:/srv/acs-mnscu
+      - ./acs-mnscu.conf:/etc/nginx/conf.d/acs-mnscu.conf
+    ports:
+      - "80:80"
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3320:3306"
+
+volumes:
+  db-data:
