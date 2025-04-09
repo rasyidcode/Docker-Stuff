@@ -9,6 +9,11 @@ services:
     build: ./php/82
     volumes:
       - ./../../../VMA-Work/idp-symfony:/srv/idp-symfony
+      - ./../../../VMA-Work/simplesamlphp:/srv/simplesamlphp
+      - db-data:/var/lib/mysql-data
+  php81-fpm:
+    build: ./php/81
+    volumes:
       - db-data:/var/lib/mysql-data
   nginx:
     image: nginx:1.27.4-alpine
@@ -19,6 +24,8 @@ services:
       - ./nginx/vhost/idp.conf:/etc/nginx/conf.d/idp-nginx.conf
       - ./../../../VMA-Work/rst-acs:/srv/rst-acs
       - ./nginx/vhost/acs-nginx.conf:/etc/nginx/conf.d/acs-nginx.conf
+      - ./../../../VMA-Work/simplesamlphp:/srv/simplesamlphp
+      - ./nginx/vhost/simplesamlphp.conf:/etc/nginx/conf.d/simplesamlphp.conf
     ports:
       - "80:80"
     networks:
