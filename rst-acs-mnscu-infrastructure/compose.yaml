@@ -3,6 +3,7 @@ services:
     build: .
     volumes:
       - ./../../../VMA-Work/acs-mnscu-php8:/srv/acs-mnscu
+      - db-data:/var/lib/mysql-data
   nginx:
     image: nginx:1.27.4-alpine
     volumes:
@@ -16,8 +17,14 @@ services:
       - MYSQL_ROOT_PASSWORD=secret
     volumes:
       - db-data:/var/lib/mysql
+    command:
+      - --require_secure_transport=ON
     ports:
       - "3320:3306"
+    networks:
+      default:
+        aliases:
+          - MySQL_Server_8.0.41_Auto_Generated_Server_Certificate
 
 volumes:
   db-data:
