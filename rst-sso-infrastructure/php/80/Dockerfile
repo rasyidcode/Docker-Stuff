@@ -2,7 +2,6 @@
 
 # Versions
 FROM php:8.0-fpm-alpine AS php_upstream
-FROM mlocati/php-extension-installer:latest AS php_extension_installer_upstream
 FROM composer:latest AS composer_upstream
 
 FROM php_upstream AS php80
@@ -11,7 +10,7 @@ FROM php_upstream AS php80
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
-COPY --from=php_extension_installer_upstream --link /usr/bin/install-php-extensions /usr/local/bin
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 RUN apk add --no-cache \
     git \

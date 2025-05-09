@@ -45,7 +45,7 @@ services:
     networks:
       default:
         aliases:
-          - MySQL_Server_8.0.41_Auto_Generated_Server_Certificate
+          - MySQL_Server_8.0.42_Auto_Generated_Server_Certificate
   redis:
     image: redis:7.2-alpine
     ports:
