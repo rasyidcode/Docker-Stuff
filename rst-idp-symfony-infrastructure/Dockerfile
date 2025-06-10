@@ -29,8 +29,8 @@ RUN set -eux; \
         intl \
         zip \
         opcache \
-	apcu \
-	xdebug
+        apcu \
+        xdebug
 
 COPY --from=composer_upstream --link /usr/bin/composer /usr/local/bin/composer
 
