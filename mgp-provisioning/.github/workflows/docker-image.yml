@@ -1,0 +1,65 @@
+name: Deploy Monthly Grocery Planner app
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+    #   - name: Extract Docker image metadata for frontend
+    #     id: meta-fe
+    #     uses: docker/metadata-action@v5
+    #     with:
+    #       images: ${{ vars.DOCKER_USERNAME }}/mgp-fe
+
+    #   - name: Extract Docker image metadata for backend
+    #     id: meta-be
+    #     uses: docker/metadata-action@v5
+    #     with:
+    #       images: ${{ vars.DOCKER_USERNAME }}/mgp-be
+
+    #   - name: Log in to Docker Hub
+    #     uses: docker/login-action@v3
+    #     with:
+    #       username: ${{ vars.DOCKER_USERNAME }}
+    #       password: ${{ secrets.DOCKER_PASSWORD }}
+
+    #   - name: Setup up Docker Buildx
+    #     uses: docker/setup-buildx-action@v3
+
+    #   - name: Build and push frontend Docker image
+    #     uses: docker/build-push-action@v6
+    #     with:
+    #       context: ./frontend
+    #       file: ./frontend/prod.Dockerfile
+    #       push: ${{ github.event_name != 'pull_request' }}
+    #       tags: ${{ steps.meta-fe.outputs.tags }}
+    #       annotations: ${{ steps.meta-fe.outputs.annotations }}
+
+    #   - name: Build and push backend Docker image
+    #     uses: docker/build-push-action@v6
+    #     with:
+    #       context: ./backend
+    #       file: ./backend/prod.Dockerfile
+    #       push: ${{ github.event_name != 'pull_request' }}
+    #       tags: ${{ steps.meta-be.outputs.tags }}
+    #       annotations: ${{ steps.meta-be.outputs.annotations }}
+
+      # - name: Deploy to EC2
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       cd ~/monthly-grocery-planner
+      #       git pull origin master || true
+
