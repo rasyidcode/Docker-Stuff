@@ -1,0 +1,36 @@
+services:
+  # frontend:
+  #   build: ./frontend
+  #   container_name: mgp-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+
+  # backend:
+  #   build: ./backend
+  #   container_name: mgp-backend
+  #   ports:
+  #     - "4000:4000"
+  #   environment:
+  #     - PORT=4000
+  #   volumes:
+  #     - ./backend:/app
+  #     - /app/node_modules
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - mgp-data:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+
+volumes:
+  mgp-data:
