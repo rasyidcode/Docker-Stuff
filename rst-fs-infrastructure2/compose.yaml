@@ -1,0 +1,48 @@
+services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ../../facility-scheduler:/srv/facility-scheduler
+      - ./nginx-fs.conf:/etc/nginx/conf.d/nginx-fs.conf
+    ports:
+      - "80:80"
+
+  php-fpm:
+    build:
+      context: .
+    volumes:
+      - ../../facility-scheduler:/srv/facility-scheduler
+      - db-data:/var/lib/mysql
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  mongo:
+    image: mongo:8.3
+    environment:
+      MONGO_INITDB_DATABASE: fsmonolog
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6379:6379"
+    # command: redis-server --save 60 1 --loglevel warning --requirepass nwfQPGPnoxW6L69hRsb304hp7MOC
+    volumes:
+      - redis-data:/data
+
+volumes:
+  db-data:
+  mongo-data:
+  redis-data:
